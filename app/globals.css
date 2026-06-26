@@ -1,0 +1,86 @@
+@import "tailwindcss";
+
+/*
+  AgentSeal Phase 1 Global Styles
+  --------------------------------
+  The UI uses a dark enterprise dashboard look inspired by your reference image:
+  navy background, cyan glow, glass cards, and clean readable spacing.
+*/
+
+:root {
+  --agentseal-bg: #020617;
+  --agentseal-panel: rgba(8, 22, 45, 0.78);
+  --agentseal-stroke: rgba(103, 232, 249, 0.18);
+  --agentseal-cyan: #22d3ee;
+  --agentseal-blue: #3b82f6;
+  --agentseal-green: #34d399;
+  --agentseal-red: #fb7185;
+  --agentseal-amber: #f59e0b;
+  --agentseal-muted: #94a3b8;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  background: var(--agentseal-bg);
+}
+
+body {
+  min-height: 100vh;
+  margin: 0;
+  color: #e5f4ff;
+  background:
+    radial-gradient(circle at 18% 12%, rgba(34, 211, 238, 0.16), transparent 34%),
+    radial-gradient(circle at 85% 10%, rgba(59, 130, 246, 0.18), transparent 32%),
+    linear-gradient(135deg, #020617 0%, #031026 42%, #020617 100%);
+  font-family:
+    Inter,
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+}
+
+/* Reusable glass card style for dashboard panels. */
+.glass-card {
+  background: linear-gradient(145deg, rgba(13, 31, 59, 0.84), rgba(7, 18, 37, 0.78));
+  border: 1px solid var(--agentseal-stroke);
+  box-shadow:
+    0 22px 80px rgba(0, 0, 0, 0.28),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(18px);
+}
+
+/* Very soft grid in the background, like a control-room interface. */
+.grid-bg {
+  background-image:
+    linear-gradient(rgba(148, 163, 184, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(148, 163, 184, 0.04) 1px, transparent 1px);
+  background-size: 42px 42px;
+}
+
+/* Small glowing focus style for inputs and buttons. */
+.focus-glow:focus {
+  border-color: rgba(34, 211, 238, 0.55);
+  box-shadow: 0 0 28px rgba(34, 211, 238, 0.14);
+}
+
+.trust-ring {
+  background: conic-gradient(#2dd4bf 0 313deg, rgba(15, 23, 42, 0.86) 313deg 360deg);
+}
+
+.policy-ring {
+  background: conic-gradient(#22d3ee 0 331deg, #f59e0b 331deg 352deg, #fb7185 352deg 360deg);
+}
+
+.redteam-ring {
+  background: conic-gradient(#60a5fa 0 281deg, #93c5fd 281deg 338deg, #fb7185 338deg 360deg);
+}
+
+.risk-arc {
+  background: conic-gradient(from 238deg, #2dd4bf 0deg, #22d3ee 82deg, rgba(30, 41, 59, 0.92) 83deg 300deg, transparent 300deg);
+}
