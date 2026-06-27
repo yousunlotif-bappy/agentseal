@@ -33,12 +33,12 @@ import {
 /**
  * Gladiator Engine Page
  * ---------------------
- * Phase 3:
+ * Phase 4:
  * - Reads active assessment
- * - Reads generated Test Forge cases
- * - Creates adversarial red-team prompts
+ * - Reads Test Forge generated test cases
+ * - Generates red-team adversarial prompts
  * - Saves prompts to localStorage
- * - Updates workflow stage to Gladiator Engine
+ * - Updates workflow status to "Red Team Generated"
  */
 
 function SeverityBadge({ severity }: { severity: AttackSeverity }) {
@@ -78,6 +78,9 @@ export default function GladiatorEnginePage() {
   const [testCases, setTestCases] = useState<GeneratedTestCase[]>([]);
   const [prompts, setPrompts] = useState<RedTeamPrompt[]>([]);
 
+  /**
+   * Load active workflow data from localStorage.
+   */
   useEffect(() => {
     const activeAssessment = getActiveAssessment();
 
@@ -89,6 +92,9 @@ export default function GladiatorEnginePage() {
     }
   }, []);
 
+  /**
+   * Generate red-team prompts from Test Forge test cases.
+   */
   function handleGeneratePrompts() {
     if (!assessment || testCases.length === 0) return;
 
@@ -110,15 +116,17 @@ export default function GladiatorEnginePage() {
     (prompt) => prompt.severity === "Critical"
   ).length;
 
-  const highCount = prompts.filter((prompt) => prompt.severity === "High").length;
+  const highCount = prompts.filter(
+    (prompt) => prompt.severity === "High"
+  ).length;
 
   const injectionCount = prompts.filter((prompt) =>
     prompt.attackType.toLowerCase().includes("injection")
   ).length;
 
   /**
-   * State 1:
-   * User directly opened Gladiator Engine without submitting assessment.
+   * Guard 1:
+   * No assessment submitted yet.
    */
   if (!assessment) {
     return (
@@ -161,8 +169,8 @@ export default function GladiatorEnginePage() {
   }
 
   /**
-   * State 2:
-   * Assessment exists, but Test Forge did not generate test cases yet.
+   * Guard 2:
+   * Assessment exists, but Test Forge has not generated test cases yet.
    */
   if (testCases.length === 0) {
     return (
@@ -209,15 +217,15 @@ export default function GladiatorEnginePage() {
       <div className="mx-auto max-w-7xl">
         <div className="mb-7 flex flex-col justify-between gap-4 md:flex-row md:items-center">
           <Link
-            href="/"
+            href="/test-forge"
             className="inline-flex w-fit items-center gap-2 rounded-xl border border-cyan-300/20 bg-cyan-300/10 px-4 py-3 text-sm font-semibold text-cyan-100 hover:bg-cyan-300/15"
           >
             <ArrowLeft className="h-4 w-4" />
-            Back to Dashboard
+            Back to Test Forge
           </Link>
 
           <span className="w-fit rounded-full border border-rose-300/30 bg-rose-300/10 px-4 py-2 text-sm font-bold text-rose-200">
-            Step 03 / Gladiator Engine
+            Phase 4 / Gladiator Engine
           </span>
         </div>
 
@@ -424,7 +432,7 @@ export default function GladiatorEnginePage() {
 
             <div className="mt-6 flex flex-col gap-3 rounded-2xl border border-amber-300/20 bg-amber-300/[0.06] p-5 text-sm leading-6 text-amber-100 md:flex-row md:items-center md:justify-between">
               <p>
-                Phase 3 completed. Phase 4 will use these prompts to simulate
+                Phase 4 completed. Next phase will use these prompts to simulate
                 execution results, pass/fail status, and evidence logs.
               </p>
 
@@ -452,5 +460,6 @@ export default function GladiatorEnginePage() {
     </main>
   );
 }
+
 
 

@@ -7,17 +7,17 @@ import type {
 } from "./agentseal-types";
 
 /**
- * AgentSeal Local Storage Layer
- * -----------------------------
- * Phase 3 still uses localStorage as a frontend-only demo database.
+ * AgentSeal Storage Layer
+ * -----------------------
+ * This is a frontend-only demo data layer.
  *
- * Why?
- * - No backend required yet
- * - Easy contest demo
- * - Assessment, Test Forge, Gladiator Engine, and Dashboard can share data
+ * We use localStorage because:
+ * - No backend is needed yet.
+ * - Dashboard, Test Forge, and Gladiator Engine can share workflow data.
+ * - It is perfect for early demo/prototype phase.
  *
  * Later:
- * This layer can be replaced by real API calls, database, or UiPath workflow.
+ * This file can be replaced with real API/database/UiPath calls.
  */
 
 const ASSESSMENTS_KEY = "agentseal.assessments.v1";
@@ -30,8 +30,8 @@ function isBrowser() {
 }
 
 /**
- * Safe JSON reader.
- * If localStorage is empty or broken, we return the fallback value.
+ * Safe localStorage JSON reader.
+ * If data is missing or corrupted, fallback value is returned.
  */
 function readJson<T>(key: string, fallback: T): T {
   if (!isBrowser()) return fallback;
@@ -50,7 +50,7 @@ function readJson<T>(key: string, fallback: T): T {
 }
 
 /**
- * Safe JSON writer.
+ * Safe localStorage JSON writer.
  */
 function writeJson<T>(key: string, value: T) {
   if (!isBrowser()) return;
@@ -59,7 +59,7 @@ function writeJson<T>(key: string, value: T) {
 }
 
 /**
- * Returns all submitted assessments.
+ * Return all submitted assessments.
  * Newest assessment comes first.
  */
 export function getAssessments(): AgentAssessment[] {
@@ -67,7 +67,7 @@ export function getAssessments(): AgentAssessment[] {
 }
 
 /**
- * Saves one assessment and makes it active.
+ * Save one assessment and make it active.
  */
 export function saveAssessment(assessment: AgentAssessment) {
   if (!isBrowser()) return;
@@ -85,8 +85,8 @@ export function saveAssessment(assessment: AgentAssessment) {
 }
 
 /**
- * Returns the active assessment.
- * If active ID is missing, it returns the newest assessment.
+ * Return active assessment.
+ * If active ID is missing, newest assessment is returned.
  */
 export function getActiveAssessment(): AgentAssessment | null {
   if (!isBrowser()) return null;
@@ -108,7 +108,7 @@ export function getActiveAssessment(): AgentAssessment | null {
 }
 
 /**
- * Updates assessment workflow status and stage.
+ * Update workflow status and stage.
  */
 export function updateAssessmentStatus(
   assessmentId: string,
@@ -139,16 +139,12 @@ export function updateAssessmentStatus(
 }
 
 /**
- * Reads all generated Test Forge test cases.
- * Data is stored by assessment ID.
+ * Test Forge storage helpers.
  */
 function getAllGeneratedTests(): Record<string, GeneratedTestCase[]> {
   return readJson<Record<string, GeneratedTestCase[]>>(TEST_CASES_KEY, {});
 }
 
-/**
- * Saves test cases for one assessment.
- */
 export function saveGeneratedTests(
   assessmentId: string,
   testCases: GeneratedTestCase[]
@@ -161,9 +157,6 @@ export function saveGeneratedTests(
   });
 }
 
-/**
- * Returns Test Forge cases for one assessment.
- */
 export function getGeneratedTests(assessmentId: string): GeneratedTestCase[] {
   const allGeneratedTests = getAllGeneratedTests();
 
@@ -171,15 +164,15 @@ export function getGeneratedTests(assessmentId: string): GeneratedTestCase[] {
 }
 
 /**
- * Reads all Gladiator Engine red-team prompts.
+ * Gladiator Engine storage helpers.
  */
 function getAllGeneratedPrompts(): Record<string, RedTeamPrompt[]> {
-  return readJson<Record<string, RedTeamPrompt[]>>(RED_TEAM_PROMPTS_KEY, {});
+  return readJson<Record<string, RedTeamPrompt[]>>(
+    RED_TEAM_PROMPTS_KEY,
+    {}
+  );
 }
 
-/**
- * Saves red-team prompts for one assessment.
- */
 export function saveGeneratedPrompts(
   assessmentId: string,
   prompts: RedTeamPrompt[]
@@ -192,9 +185,6 @@ export function saveGeneratedPrompts(
   });
 }
 
-/**
- * Returns red-team prompts for one assessment.
- */
 export function getGeneratedPrompts(assessmentId: string): RedTeamPrompt[] {
   const allGeneratedPrompts = getAllGeneratedPrompts();
 
@@ -202,8 +192,8 @@ export function getGeneratedPrompts(assessmentId: string): RedTeamPrompt[] {
 }
 
 /**
- * Demo reset helper.
- * This clears all local Phase 2 and Phase 3 workflow data.
+ * Clear all demo data.
+ * Useful when you want to test the full workflow from zero.
  */
 export function clearAgentSealDemoData() {
   if (!isBrowser()) return;

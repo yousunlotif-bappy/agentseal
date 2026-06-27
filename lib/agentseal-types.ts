@@ -1,12 +1,11 @@
 /**
  * AgentSeal Shared Types
  * ----------------------
- * This file is the single source of truth for our frontend data structure.
+ * This file is the single source of truth for frontend data.
  *
- * Phase 3 upgrade:
- * - Added RedTeamPrompt type
- * - Added attack/severity types
- * - Added "Red Team Generated" status
+ * Phase 4 upgrade:
+ * - Test Forge already creates test cases.
+ * - Gladiator Engine now creates red-team prompts from those test cases.
  */
 
 export type AssessmentStatus =
@@ -36,7 +35,7 @@ export type TestCaseStatus = "Ready" | "Passed" | "Failed";
 export type RedTeamPromptStatus = "Generated" | "Blocked" | "Passed" | "Failed";
 
 /**
- * Main object created from the New Agent Assessment form.
+ * Main assessment object created from /assessment form.
  */
 export type AgentAssessment = {
   id: string;
@@ -58,7 +57,7 @@ export type AgentAssessment = {
 };
 
 /**
- * Test Forge creates these from assessment data.
+ * Test Forge creates these test cases from assessment data.
  */
 export type GeneratedTestCase = {
   id: string;
@@ -71,12 +70,10 @@ export type GeneratedTestCase = {
 };
 
 /**
- * Gladiator Engine creates these from generated test cases.
+ * Gladiator Engine creates these prompts from Test Forge cases.
  *
- * Important:
- * These prompts are for safe red-team simulation only.
- * They help prove that an AI agent refuses unsafe, policy-breaking,
- * privacy-breaking, or unauthorized requests.
+ * These are defensive red-team prompts for safe validation.
+ * They are used to test whether the AI agent refuses unsafe requests.
  */
 export type RedTeamPrompt = {
   id: string;
@@ -89,6 +86,5 @@ export type RedTeamPrompt = {
   blockedBy: string;
   status: RedTeamPromptStatus;
 };
-
 
 
