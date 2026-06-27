@@ -3,35 +3,34 @@ import type {
   AssessmentStatus,
   GeneratedTestCase,
   RedTeamPrompt,
+  RiskSealReport,
+  TestExecutionRun,
   TrustStage,
 } from "./agentseal-types";
 
 /**
  * AgentSeal Storage Layer
  * -----------------------
- * This is a frontend-only demo data layer.
- *
- * We use localStorage because:
- * - No backend is needed yet.
- * - Dashboard, Test Forge, and Gladiator Engine can share workflow data.
- * - It is perfect for early demo/prototype phase.
+ * Phase 6 still uses browser localStorage as a frontend demo database.
  *
  * Later:
- * This file can be replaced with real API/database/UiPath calls.
+ * These functions can be replaced by real backend, database,
+ * UiPath Orchestrator, or UiPath Test Cloud APIs.
  */
 
 const ASSESSMENTS_KEY = "agentseal.assessments.v1";
 const ACTIVE_ASSESSMENT_KEY = "agentseal.activeAssessmentId.v1";
 const TEST_CASES_KEY = "agentseal.generatedTestCases.v1";
 const RED_TEAM_PROMPTS_KEY = "agentseal.redTeamPrompts.v1";
+const EXECUTION_RUNS_KEY = "agentseal.executionRuns.v1";
+const RISKSEAL_REPORTS_KEY = "agentseal.riskSealReports.v1";
 
 function isBrowser() {
   return typeof window !== "undefined";
 }
 
 /**
- * Safe localStorage JSON reader.
- * If data is missing or corrupted, fallback value is returned.
+ * Safe JSON reader.
  */
 function readJson<T>(key: string, fallback: T): T {
   if (!isBrowser()) return fallback;
@@ -50,7 +49,7 @@ function readJson<T>(key: string, fallback: T): T {
 }
 
 /**
- * Safe localStorage JSON writer.
+ * Safe JSON writer.
  */
 function writeJson<T>(key: string, value: T) {
   if (!isBrowser()) return;
@@ -59,16 +58,12 @@ function writeJson<T>(key: string, value: T) {
 }
 
 /**
- * Return all submitted assessments.
- * Newest assessment comes first.
+ * Assessment helpers
  */
 export function getAssessments(): AgentAssessment[] {
   return readJson<AgentAssessment[]>(ASSESSMENTS_KEY, []);
 }
 
-/**
- * Save one assessment and make it active.
- */
 export function saveAssessment(assessment: AgentAssessment) {
   if (!isBrowser()) return;
 
@@ -84,10 +79,6 @@ export function saveAssessment(assessment: AgentAssessment) {
   window.localStorage.setItem(ACTIVE_ASSESSMENT_KEY, assessment.id);
 }
 
-/**
- * Return active assessment.
- * If active ID is missing, newest assessment is returned.
- */
 export function getActiveAssessment(): AgentAssessment | null {
   if (!isBrowser()) return null;
 
@@ -107,9 +98,6 @@ export function getActiveAssessment(): AgentAssessment | null {
   return assessments[0] ?? null;
 }
 
-/**
- * Update workflow status and stage.
- */
 export function updateAssessmentStatus(
   assessmentId: string,
   status: AssessmentStatus,
@@ -139,7 +127,7 @@ export function updateAssessmentStatus(
 }
 
 /**
- * Test Forge storage helpers.
+ * Test Forge helpers
  */
 function getAllGeneratedTests(): Record<string, GeneratedTestCase[]> {
   return readJson<Record<string, GeneratedTestCase[]>>(TEST_CASES_KEY, {});
@@ -164,13 +152,10 @@ export function getGeneratedTests(assessmentId: string): GeneratedTestCase[] {
 }
 
 /**
- * Gladiator Engine storage helpers.
+ * Gladiator Engine helpers
  */
 function getAllGeneratedPrompts(): Record<string, RedTeamPrompt[]> {
-  return readJson<Record<string, RedTeamPrompt[]>>(
-    RED_TEAM_PROMPTS_KEY,
-    {}
-  );
+  return readJson<Record<string, RedTeamPrompt[]>>(RED_TEAM_PROMPTS_KEY, {});
 }
 
 export function saveGeneratedPrompts(
@@ -192,8 +177,59 @@ export function getGeneratedPrompts(assessmentId: string): RedTeamPrompt[] {
 }
 
 /**
+ * Test Execution helpers
+ */
+function getAllExecutionRuns(): Record<string, TestExecutionRun> {
+  return readJson<Record<string, TestExecutionRun>>(EXECUTION_RUNS_KEY, {});
+}
+
+export function saveExecutionRun(
+  assessmentId: string,
+  executionRun: TestExecutionRun
+) {
+  const allExecutionRuns = getAllExecutionRuns();
+
+  writeJson(EXECUTION_RUNS_KEY, {
+    ...allExecutionRuns,
+    [assessmentId]: executionRun,
+  });
+}
+
+export function getExecutionRun(assessmentId: string): TestExecutionRun | null {
+  const allExecutionRuns = getAllExecutionRuns();
+
+  return allExecutionRuns[assessmentId] ?? null;
+}
+
+/**
+ * RiskSeal helpers
+ */
+function getAllRiskSealReports(): Record<string, RiskSealReport> {
+  return readJson<Record<string, RiskSealReport>>(RISKSEAL_REPORTS_KEY, {});
+}
+
+export function saveRiskSealReport(
+  assessmentId: string,
+  report: RiskSealReport
+) {
+  const allReports = getAllRiskSealReports();
+
+  writeJson(RISKSEAL_REPORTS_KEY, {
+    ...allReports,
+    [assessmentId]: report,
+  });
+}
+
+export function getRiskSealReport(
+  assessmentId: string
+): RiskSealReport | null {
+  const allReports = getAllRiskSealReports();
+
+  return allReports[assessmentId] ?? null;
+}
+
+/**
  * Clear all demo data.
- * Useful when you want to test the full workflow from zero.
  */
 export function clearAgentSealDemoData() {
   if (!isBrowser()) return;
@@ -202,6 +238,8 @@ export function clearAgentSealDemoData() {
   window.localStorage.removeItem(ACTIVE_ASSESSMENT_KEY);
   window.localStorage.removeItem(TEST_CASES_KEY);
   window.localStorage.removeItem(RED_TEAM_PROMPTS_KEY);
+  window.localStorage.removeItem(EXECUTION_RUNS_KEY);
+  window.localStorage.removeItem(RISKSEAL_REPORTS_KEY);
 }
 
 
