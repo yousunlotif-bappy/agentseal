@@ -1,8 +1,12 @@
 import type {
   AgentAssessment,
   AssessmentStatus,
+  EvidenceVaultReport,
   GeneratedTestCase,
+  HumanReviewRecord,
+  LiveSealMonitorReport,
   RedTeamPrompt,
+  ReleaseCertificate,
   RiskSealReport,
   TestExecutionRun,
   TrustStage,
@@ -11,11 +15,12 @@ import type {
 /**
  * AgentSeal Storage Layer
  * -----------------------
- * Phase 6 still uses browser localStorage as a frontend demo database.
+ * Phase 10 still uses browser localStorage as frontend demo database.
  *
  * Later:
- * These functions can be replaced by real backend, database,
- * UiPath Orchestrator, or UiPath Test Cloud APIs.
+ * These helpers can be replaced by backend APIs, database,
+ * UiPath Orchestrator, UiPath Action Center, UiPath Test Cloud,
+ * cloud object storage, or real runtime monitoring services.
  */
 
 const ASSESSMENTS_KEY = "agentseal.assessments.v1";
@@ -24,13 +29,17 @@ const TEST_CASES_KEY = "agentseal.generatedTestCases.v1";
 const RED_TEAM_PROMPTS_KEY = "agentseal.redTeamPrompts.v1";
 const EXECUTION_RUNS_KEY = "agentseal.executionRuns.v1";
 const RISKSEAL_REPORTS_KEY = "agentseal.riskSealReports.v1";
+const HUMAN_REVIEW_RECORDS_KEY = "agentseal.humanReviewRecords.v1";
+const EVIDENCE_VAULT_REPORTS_KEY = "agentseal.evidenceVaultReports.v1";
+const RELEASE_CERTIFICATES_KEY = "agentseal.releaseCertificates.v1";
+const LIVESEAL_MONITOR_REPORTS_KEY = "agentseal.liveSealMonitorReports.v1";
 
 function isBrowser() {
   return typeof window !== "undefined";
 }
 
 /**
- * Safe JSON reader.
+ * Safe localStorage JSON reader.
  */
 function readJson<T>(key: string, fallback: T): T {
   if (!isBrowser()) return fallback;
@@ -49,7 +58,7 @@ function readJson<T>(key: string, fallback: T): T {
 }
 
 /**
- * Safe JSON writer.
+ * Safe localStorage JSON writer.
  */
 function writeJson<T>(key: string, value: T) {
   if (!isBrowser()) return;
@@ -229,6 +238,129 @@ export function getRiskSealReport(
 }
 
 /**
+ * Human Seal Gate helpers
+ */
+function getAllHumanReviewRecords(): Record<string, HumanReviewRecord> {
+  return readJson<Record<string, HumanReviewRecord>>(
+    HUMAN_REVIEW_RECORDS_KEY,
+    {}
+  );
+}
+
+export function saveHumanReviewRecord(
+  assessmentId: string,
+  record: HumanReviewRecord
+) {
+  const allRecords = getAllHumanReviewRecords();
+
+  writeJson(HUMAN_REVIEW_RECORDS_KEY, {
+    ...allRecords,
+    [assessmentId]: record,
+  });
+}
+
+export function getHumanReviewRecord(
+  assessmentId: string
+): HumanReviewRecord | null {
+  const allRecords = getAllHumanReviewRecords();
+
+  return allRecords[assessmentId] ?? null;
+}
+
+/**
+ * Evidence Vault helpers
+ */
+function getAllEvidenceVaultReports(): Record<string, EvidenceVaultReport> {
+  return readJson<Record<string, EvidenceVaultReport>>(
+    EVIDENCE_VAULT_REPORTS_KEY,
+    {}
+  );
+}
+
+export function saveEvidenceVaultReport(
+  assessmentId: string,
+  report: EvidenceVaultReport
+) {
+  const allReports = getAllEvidenceVaultReports();
+
+  writeJson(EVIDENCE_VAULT_REPORTS_KEY, {
+    ...allReports,
+    [assessmentId]: report,
+  });
+}
+
+export function getEvidenceVaultReport(
+  assessmentId: string
+): EvidenceVaultReport | null {
+  const allReports = getAllEvidenceVaultReports();
+
+  return allReports[assessmentId] ?? null;
+}
+
+/**
+ * Release Certificate helpers
+ */
+function getAllReleaseCertificates(): Record<string, ReleaseCertificate> {
+  return readJson<Record<string, ReleaseCertificate>>(
+    RELEASE_CERTIFICATES_KEY,
+    {}
+  );
+}
+
+export function saveReleaseCertificate(
+  assessmentId: string,
+  certificate: ReleaseCertificate
+) {
+  const allCertificates = getAllReleaseCertificates();
+
+  writeJson(RELEASE_CERTIFICATES_KEY, {
+    ...allCertificates,
+    [assessmentId]: certificate,
+  });
+}
+
+export function getReleaseCertificate(
+  assessmentId: string
+): ReleaseCertificate | null {
+  const allCertificates = getAllReleaseCertificates();
+
+  return allCertificates[assessmentId] ?? null;
+}
+
+/**
+ * LiveSeal Monitor helpers
+ */
+function getAllLiveSealMonitorReports(): Record<
+  string,
+  LiveSealMonitorReport
+> {
+  return readJson<Record<string, LiveSealMonitorReport>>(
+    LIVESEAL_MONITOR_REPORTS_KEY,
+    {}
+  );
+}
+
+export function saveLiveSealMonitorReport(
+  assessmentId: string,
+  report: LiveSealMonitorReport
+) {
+  const allReports = getAllLiveSealMonitorReports();
+
+  writeJson(LIVESEAL_MONITOR_REPORTS_KEY, {
+    ...allReports,
+    [assessmentId]: report,
+  });
+}
+
+export function getLiveSealMonitorReport(
+  assessmentId: string
+): LiveSealMonitorReport | null {
+  const allReports = getAllLiveSealMonitorReports();
+
+  return allReports[assessmentId] ?? null;
+}
+
+/**
  * Clear all demo data.
  */
 export function clearAgentSealDemoData() {
@@ -240,6 +372,10 @@ export function clearAgentSealDemoData() {
   window.localStorage.removeItem(RED_TEAM_PROMPTS_KEY);
   window.localStorage.removeItem(EXECUTION_RUNS_KEY);
   window.localStorage.removeItem(RISKSEAL_REPORTS_KEY);
+  window.localStorage.removeItem(HUMAN_REVIEW_RECORDS_KEY);
+  window.localStorage.removeItem(EVIDENCE_VAULT_REPORTS_KEY);
+  window.localStorage.removeItem(RELEASE_CERTIFICATES_KEY);
+  window.localStorage.removeItem(LIVESEAL_MONITOR_REPORTS_KEY);
 }
 
 
