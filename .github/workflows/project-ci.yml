@@ -1,0 +1,72 @@
+name: AgentSeal Project CI
+
+on:
+  push:
+    branches:
+      - main
+
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  frontend-build:
+    name: Frontend Build Check
+    runs-on: ubuntu-latest
+
+    steps:
+      # Pull the latest repository code into the GitHub runner.
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # AgentSeal frontend uses Next.js, so Node.js is required.
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      # npm ci is cleaner for CI because it installs from package-lock.json.
+      - name: Install frontend dependencies
+        run: npm ci
+
+      # This proves the Next.js frontend can compile successfully.
+      - name: Build Next.js frontend
+        run: npm run build
+
+  backend-check:
+    name: FastAPI Backend Check
+    runs-on: ubuntu-latest
+
+    steps:
+      # Pull the latest repository code into the GitHub runner.
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Backend MVP uses FastAPI, so Python is required.
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      # Install backend dependencies from backend/requirements.txt.
+      - name: Install backend dependencies
+        working-directory: backend
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      # This checks that backend Python files can compile.
+      - name: Validate backend Python files
+        working-directory: backend
+        run: |
+          python -m py_compile main.py models.py storage.py routes_uipath.py
+
+      # This checks that the FastAPI app can be imported without crashing.
+      - name: Import FastAPI app
+        working-directory: backend
+        run: |
+          python -c "from main import app; print('AgentSeal FastAPI app import successful')"
+
+
+          

@@ -52,3 +52,9 @@ tmp/
 temp/
 .cache/
 
+
+.env
+.env.local
+backend/.env
+backend/.venv
+
