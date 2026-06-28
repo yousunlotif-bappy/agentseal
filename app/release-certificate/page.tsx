@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -51,7 +51,7 @@ import {
 /**
  * Release Certificate Page
  * ------------------------
- * Phase 9:
+ * Release Certificate workflow:
  * - Reads Evidence Vault package
  * - Confirms Human Seal Gate approval
  * - Generates final production readiness certificate
@@ -287,7 +287,7 @@ export default function ReleaseCertificatePage() {
           </Link>
 
           <span className="w-fit rounded-full border border-emerald-300/30 bg-emerald-300/10 px-4 py-2 text-sm font-bold text-emerald-200">
-            Phase 9 / Release Certificate
+            Release Certificate
           </span>
         </div>
 
@@ -373,7 +373,7 @@ export default function ReleaseCertificatePage() {
                     {assessment.agentName}
                   </h2>
                   <p className="mt-1 text-slate-400">
-                    Status: {assessment.status} · Stage: {assessment.trustStage}
+                    Status: {assessment.status} Â· Stage: {assessment.trustStage}
                   </p>
                 </div>
               </div>
@@ -693,8 +693,7 @@ export default function ReleaseCertificatePage() {
               <div className="flex items-start gap-3">
                 <Rocket className="mt-1 h-5 w-5 shrink-0" />
                 <p>
-                  Phase 9 completed. AgentSeal has issued the final production
-                  seal certificate from the full evidence trail.
+                  AgentSeal has issued the final production seal certificate from the full evidence trail.
                 </p>
               </div>
 
@@ -714,7 +713,7 @@ export default function ReleaseCertificatePage() {
               No Release Certificate Yet
             </h2>
             <p className="mx-auto mt-3 max-w-2xl text-slate-400">
-              Click “Generate Release Certificate” to issue the final AgentSeal
+              Click â€œGenerate Release Certificateâ€ to issue the final AgentSeal
               production-readiness seal.
             </p>
           </section>
@@ -723,6 +722,8 @@ export default function ReleaseCertificatePage() {
     </main>
   );
 }
+
+
 
 
 

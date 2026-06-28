@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -34,7 +34,7 @@ import {
  * - Updates workflow status to "Tests Generated"
  * - Provides next-step button to Gladiator Engine
  *
- * Phase 3 ready:
+ * Gladiator workflow ready:
  * After test generation, the user can continue to Gladiator Engine,
  * where these test cases become red-team adversarial prompts.
  */
@@ -221,7 +221,7 @@ export default function TestForgePage() {
                     {assessment.agentName}
                   </h2>
                   <p className="mt-1 text-slate-400">
-                    Status: {assessment.status} · Stage: {assessment.trustStage}
+                    Status: {assessment.status} Â· Stage: {assessment.trustStage}
                   </p>
                 </div>
               </div>
@@ -351,12 +351,10 @@ export default function TestForgePage() {
               ))}
             </div>
 
-            {/* Phase 3 next-step button */}
+            {/* Next-step button */}
             <div className="mt-6 flex flex-col gap-3 rounded-2xl border border-amber-300/20 bg-amber-300/[0.06] p-5 text-sm leading-6 text-amber-100 md:flex-row md:items-center md:justify-between">
               <p>
-                Phase 2 uses demo generation. In Phase 3, Gladiator Engine will
-                use these test cases to create adversarial prompts and red-team
-                attacks.
+                Test Forge generated the validation suite. Continue to Gladiator Engine to create adversarial prompts and red-team attacks.
               </p>
 
               <Link
@@ -372,7 +370,7 @@ export default function TestForgePage() {
             <FlaskConical className="mx-auto h-14 w-14 text-cyan-300" />
             <h2 className="mt-5 text-2xl font-black">No Tests Generated Yet</h2>
             <p className="mx-auto mt-3 max-w-2xl text-slate-400">
-              Click “Generate Test Suite” to create test cases from the submitted
+              Click â€œGenerate Test Suiteâ€ to create test cases from the submitted
               assessment.
             </p>
           </section>
@@ -381,6 +379,8 @@ export default function TestForgePage() {
     </main>
   );
 }
+
+
 
 
 

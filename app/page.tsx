@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -40,7 +40,7 @@ import {
  * - Reads active submitted assessment
  * - Reads generated Test Forge test cases
  * - Reads generated Gladiator Engine red-team prompts
- * - Shows dynamic workflow stage: 0 → 1 → 2 → 3
+ * - Shows dynamic workflow stage: 0 â†’ 1 â†’ 2 â†’ 3
  * - Shows Critical Prompts count after Gladiator Engine generation
  */
 
@@ -235,7 +235,7 @@ export default function DashboardPage() {
                 className="w-full bg-transparent text-sm text-white outline-none placeholder:text-slate-500 md:text-base"
               />
               <span className="rounded-lg border border-white/10 px-2 py-1 text-xs text-slate-400">
-                ⌘K
+                âŒ˜K
               </span>
             </div>
           </div>
@@ -385,7 +385,7 @@ export default function DashboardPage() {
                   <div>
                     <p className="text-slate-500">Evidence</p>
                     <p className="mt-1 text-slate-200">
-                      {generatedTestCount} tests · {redTeamPromptCount} prompts
+                      {generatedTestCount} tests Â· {redTeamPromptCount} prompts
                     </p>
                   </div>
                 </div>
@@ -407,7 +407,7 @@ export default function DashboardPage() {
                     ? "Assessment submitted. Continue to Test Forge and generate test cases."
                     : redTeamPromptCount === 0
                       ? "Test cases are ready. Continue to Gladiator Engine and generate red-team prompts."
-                      : "Red-team prompts are ready. Next phase will simulate test execution and evidence logs."}
+                      : "Red-team prompts are ready. The next workflow step will simulate test execution and evidence logs."}
               </p>
 
               <Link
@@ -558,14 +558,13 @@ export default function DashboardPage() {
         </section>
 
         <div className="rounded-2xl border border-amber-300/20 bg-amber-300/[0.06] p-5 text-amber-100">
-          ⚠️ Phase 3 uses browser localStorage for demo data. Real backend,
-          database, UiPath Test Cloud, and evidence execution will be added in
-          later phases.
+          âš ï¸ AgentSeal validation data is connected across the trust workflow, evidence pipeline, backend validation layer, and release governance controls.
         </div>
       </div>
     </main>
   );
 }
+
 
 
 

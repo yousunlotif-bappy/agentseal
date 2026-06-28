@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -39,7 +39,7 @@ import {
 /**
  * RiskSeal Page
  * -------------
- * Phase 6:
+ * RiskSeal workflow:
  * - Reads Test Execution run
  * - Calculates explainable risk score
  * - Creates release decision
@@ -228,7 +228,7 @@ export default function RiskSealPage() {
           </Link>
 
           <span className="w-fit rounded-full border border-emerald-300/30 bg-emerald-300/10 px-4 py-2 text-sm font-bold text-emerald-200">
-            Phase 6 / RiskSeal
+            RiskSeal
           </span>
         </div>
 
@@ -294,7 +294,7 @@ export default function RiskSealPage() {
 
           <MetricCard
             label="Risk Score"
-            value={riskReport ? `${riskReport.riskScore}/100` : "—"}
+            value={riskReport ? `${riskReport.riskScore}/100` : "â€”"}
             note={riskReport ? riskReport.decision : "Not calculated yet"}
             icon={Gauge}
             tone="bg-amber-300/10 text-amber-200"
@@ -314,7 +314,7 @@ export default function RiskSealPage() {
                     {assessment.agentName}
                   </h2>
                   <p className="mt-1 text-slate-400">
-                    Status: {assessment.status} · Stage: {assessment.trustStage}
+                    Status: {assessment.status} Â· Stage: {assessment.trustStage}
                   </p>
                 </div>
               </div>
@@ -398,9 +398,9 @@ export default function RiskSealPage() {
 
               <div className="grid gap-4 md:grid-cols-3">
                 {[
-                  ["0–30", "Seal Ready", "Low-risk agent can proceed."],
-                  ["31–60", "Human Review", "Reviewer approval required."],
-                  ["61–100", "Blocked", "Remediation required before release."],
+                  ["0â€“30", "Seal Ready", "Low-risk agent can proceed."],
+                  ["31â€“60", "Human Review", "Reviewer approval required."],
+                  ["61â€“100", "Blocked", "Remediation required before release."],
                 ].map(([range, title, desc]) => (
                   <div
                     key={range}
@@ -444,7 +444,7 @@ export default function RiskSealPage() {
                       <div className="mb-3 flex flex-col justify-between gap-2 md:flex-row md:items-center">
                         <div>
                           <p className="font-mono text-sm text-cyan-300">
-                            {item.id} · {item.sourceId}
+                            {item.id} Â· {item.sourceId}
                           </p>
                           <h3 className="mt-1 text-xl font-black text-white">
                             {item.label}
@@ -543,9 +543,7 @@ export default function RiskSealPage() {
               <div className="flex items-start gap-3">
                 <AlertTriangle className="mt-1 h-5 w-5 shrink-0" />
                 <p>
-                  Phase 6 completed. Human Seal Gate will use this decision,
-                  route, gates, recommendations, and evidence to approve or
-                  reject release.
+                  RiskSeal decision is ready. Continue to Human Seal Gate to review evidence, approve release, request remediation, or reject release.
                 </p>
               </div>
 
@@ -565,7 +563,7 @@ export default function RiskSealPage() {
               No RiskSeal Report Yet
             </h2>
             <p className="mx-auto mt-3 max-w-2xl text-slate-400">
-              Click “Calculate RiskSeal Score” to create the final risk score,
+              Click â€œCalculate RiskSeal Scoreâ€ to create the final risk score,
               release decision, and human review routing.
             </p>
           </section>
@@ -574,6 +572,8 @@ export default function RiskSealPage() {
     </main>
   );
 }
+
+
 
 
 

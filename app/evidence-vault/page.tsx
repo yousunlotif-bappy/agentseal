@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -56,7 +56,7 @@ import {
 /**
  * Evidence Vault Page
  * -------------------
- * Phase 8:
+ * Evidence Vault workflow:
  * - Reads all previous workflow evidence
  * - Builds an audit-ready evidence package
  * - Shows artifacts, report structure, timeline, downloadable metadata
@@ -313,7 +313,7 @@ export default function EvidenceVaultPage() {
           </Link>
 
           <span className="w-fit rounded-full border border-cyan-300/30 bg-cyan-300/10 px-4 py-2 text-sm font-bold text-cyan-200">
-            Phase 8 / Evidence Vault
+            Evidence Vault
           </span>
         </div>
 
@@ -356,7 +356,7 @@ export default function EvidenceVaultPage() {
         <section className="mb-6 grid gap-5 md:grid-cols-2 xl:grid-cols-4">
           <MetricCard
             label="Evidence Items"
-            value={evidenceReport ? String(evidenceReport.totalEvidenceItems) : "—"}
+            value={evidenceReport ? String(evidenceReport.totalEvidenceItems) : "â€”"}
             note={evidenceReport ? evidenceReport.status : "Not packaged yet"}
             icon={FileArchive}
             tone="bg-cyan-300/10 text-cyan-200"
@@ -400,7 +400,7 @@ export default function EvidenceVaultPage() {
                     {assessment.agentName}
                   </h2>
                   <p className="mt-1 text-slate-400">
-                    Status: {assessment.status} · Stage: {assessment.trustStage}
+                    Status: {assessment.status} Â· Stage: {assessment.trustStage}
                   </p>
                 </div>
               </div>
@@ -681,8 +681,7 @@ export default function EvidenceVaultPage() {
               <div className="flex items-start gap-3">
                 <Shield className="mt-1 h-5 w-5 shrink-0" />
                 <p>
-                  Phase 8 completed. Release Certificate will use this evidence
-                  vault package to generate the final production-readiness seal.
+                  Evidence Vault package is ready. Continue to Release Certificate to generate the final production-readiness seal.
                 </p>
               </div>
 
@@ -708,7 +707,7 @@ export default function EvidenceVaultPage() {
               No Evidence Vault Pack Yet
             </h2>
             <p className="mx-auto mt-3 max-w-2xl text-slate-400">
-              Click “Build Evidence Vault Pack” to package all workflow records
+              Click â€œBuild Evidence Vault Packâ€ to package all workflow records
               into an audit-ready evidence vault.
             </p>
           </section>
@@ -717,6 +716,8 @@ export default function EvidenceVaultPage() {
     </main>
   );
 }
+
+
 
 
 

@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -43,14 +43,14 @@ import {
 /**
  * Test Execution Page
  * -------------------
- * Phase 5:
+ * Test Execution workflow:
  * - Reads active assessment
  * - Reads Test Forge generated tests
  * - Reads Gladiator Engine red-team prompts
  * - Simulates execution results
  * - Creates pass/fail/blocked evidence
  * - Creates execution timeline
- * - Saves execution run for RiskSeal phase
+ * - Saves execution run for RiskSeal workflow
  */
 
 function StatusBadge({ status }: { status: ExecutionResultStatus }) {
@@ -254,7 +254,7 @@ export default function TestExecutionPage() {
           </Link>
 
           <span className="w-fit rounded-full border border-blue-300/30 bg-blue-300/10 px-4 py-2 text-sm font-bold text-blue-200">
-            Phase 5 / Test Execution
+            Test Execution
           </span>
         </div>
 
@@ -321,7 +321,7 @@ export default function TestExecutionPage() {
 
           <MetricCard
             label="Risk Score"
-            value={executionRun ? `${executionRun.riskScore}/100` : "—"}
+            value={executionRun ? `${executionRun.riskScore}/100` : "â€”"}
             note={executionRun ? "Ready for RiskSeal" : "Not calculated yet"}
             icon={Gauge}
             tone="bg-emerald-300/10 text-emerald-200"
@@ -341,7 +341,7 @@ export default function TestExecutionPage() {
                     {assessment.agentName}
                   </h2>
                   <p className="mt-1 text-slate-400">
-                    Status: {assessment.status} · Stage: {assessment.trustStage}
+                    Status: {assessment.status} Â· Stage: {assessment.trustStage}
                   </p>
                 </div>
               </div>
@@ -527,7 +527,7 @@ export default function TestExecutionPage() {
                       >
                         <div className="mb-3 flex items-center justify-between">
                           <p className="font-mono text-sm text-rose-200">
-                            {result.id} · {result.sourceId}
+                            {result.id} Â· {result.sourceId}
                           </p>
 
                           <XCircle className="h-5 w-5 text-rose-300" />
@@ -619,9 +619,7 @@ export default function TestExecutionPage() {
 
             <div className="flex flex-col gap-3 rounded-2xl border border-amber-300/20 bg-amber-300/[0.06] p-5 text-sm leading-6 text-amber-100 md:flex-row md:items-center md:justify-between">
               <p>
-                Phase 5 completed. RiskSeal will use execution failures,
-                warnings, blocked attacks, and evidence logs to calculate the
-                final risk score.
+                Execution evidence is ready. Continue to RiskSeal to calculate the final risk score from failures, warnings, blocked attacks, and evidence logs.
               </p>
 
               <Link
@@ -640,7 +638,7 @@ export default function TestExecutionPage() {
               No Execution Run Yet
             </h2>
             <p className="mx-auto mt-3 max-w-2xl text-slate-400">
-              Click “Run Execution Suite” to create pass/fail results, evidence
+              Click â€œRun Execution Suiteâ€ to create pass/fail results, evidence
               logs, and execution timeline.
             </p>
           </section>
@@ -649,6 +647,8 @@ export default function TestExecutionPage() {
     </main>
   );
 }
+
+
 
 
 

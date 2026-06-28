@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -41,12 +41,12 @@ import {
 /**
  * Human Seal Gate Page
  * --------------------
- * Phase 7:
+ * Human Seal Gate workflow:
  * - Reads RiskSeal report
  * - Shows risk score, decision, route, gates, recommendations
  * - Allows reviewer to approve, reject, or request remediation
  * - Saves final human review record
- * - Updates assessment status for the next workflow phase
+ * - Updates assessment status for the next workflow stage
  */
 
 function decisionColor(decision: HumanReviewDecision) {
@@ -253,7 +253,7 @@ export default function HumanSealGatePage() {
           </Link>
 
           <span className="w-fit rounded-full border border-cyan-300/30 bg-cyan-300/10 px-4 py-2 text-sm font-bold text-cyan-200">
-            Phase 7 / Human Seal Gate
+            Human Seal Gate
           </span>
         </div>
 
@@ -339,7 +339,7 @@ export default function HumanSealGatePage() {
                     {assessment.agentName}
                   </h2>
                   <p className="mt-1 text-slate-400">
-                    Status: {assessment.status} · Stage: {assessment.trustStage}
+                    Status: {assessment.status} Â· Stage: {assessment.trustStage}
                   </p>
                 </div>
               </div>
@@ -556,9 +556,7 @@ export default function HumanSealGatePage() {
             <div className="flex items-start gap-3">
               <AlertTriangle className="mt-1 h-5 w-5 shrink-0" />
               <p>
-                Phase 7 completed. Evidence Vault will collect the assessment,
-                tests, prompts, execution run, RiskSeal report, and human review
-                record for audit readiness.
+                Human review record is saved. Continue to Evidence Vault to package assessment, tests, prompts, execution results, RiskSeal report, and approval evidence.
               </p>
             </div>
 
@@ -592,6 +590,8 @@ export default function HumanSealGatePage() {
     </main>
   );
 }
+
+
 
 
 

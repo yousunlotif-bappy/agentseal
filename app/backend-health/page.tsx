@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -361,7 +361,7 @@ export default function BackendHealthPage() {
                           Status
                         </p>
                         <p className="mt-1 font-black text-white">
-                          {result ? result.status : "—"}
+                          {result ? result.status : "â€”"}
                         </p>
                       </div>
 
@@ -370,7 +370,7 @@ export default function BackendHealthPage() {
                           Count
                         </p>
                         <p className="mt-1 font-black text-white">
-                          {result ? result.count : "—"}
+                          {result ? result.count : "â€”"}
                         </p>
                       </div>
 
@@ -383,7 +383,7 @@ export default function BackendHealthPage() {
                             result?.ok ? "text-emerald-300" : "text-rose-300"
                           }`}
                         >
-                          {result ? String(result.ok) : "—"}
+                          {result ? String(result.ok) : "â€”"}
                         </p>
                       </div>
                     </div>
@@ -417,7 +417,7 @@ export default function BackendHealthPage() {
           <div className="glass-card rounded-3xl p-6">
             <div className="mb-5 flex items-center gap-3">
               <Cloud className="h-7 w-7 text-cyan-300" />
-              <h2 className="text-2xl font-black">What This Phase Completes</h2>
+              <h2 className="text-2xl font-black">What This Build Completes</h2>
             </div>
 
             <div className="space-y-4">
@@ -444,7 +444,7 @@ export default function BackendHealthPage() {
           <div className="flex items-start gap-3">
             <Activity className="mt-1 h-5 w-5 shrink-0" />
             <p>
-              Mock Backend API phase completed. The AgentSeal frontend now has a
+              Mock Backend API workflow completed. The AgentSeal frontend now has a
               backend-style API layer and health check page.
             </p>
           </div>
@@ -461,6 +461,7 @@ export default function BackendHealthPage() {
     </main>
   );
 }
+
 
 
 

@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -51,7 +51,7 @@ import {
 /**
  * LiveSeal Monitor Page
  * ---------------------
- * Phase 10:
+ * LiveSeal Monitor workflow:
  * - Reads final Release Certificate
  * - Reads Evidence Vault and RiskSeal context
  * - Simulates live runtime monitoring
@@ -274,7 +274,7 @@ export default function LiveSealMonitorPage() {
           </Link>
 
           <span className="w-fit rounded-full border border-cyan-300/30 bg-cyan-300/10 px-4 py-2 text-sm font-bold text-cyan-200">
-            Phase 10 / LiveSeal Monitor
+            LiveSeal Monitor
           </span>
         </div>
 
@@ -325,7 +325,7 @@ export default function LiveSealMonitorPage() {
 
           <MetricCard
             label="Health Score"
-            value={monitorReport ? `${monitorReport.healthScore}/100` : "—"}
+            value={monitorReport ? `${monitorReport.healthScore}/100` : "â€”"}
             note="Runtime readiness"
             icon={HeartPulse}
             tone="bg-emerald-300/10 text-emerald-200"
@@ -333,7 +333,7 @@ export default function LiveSealMonitorPage() {
 
           <MetricCard
             label="Drift Score"
-            value={monitorReport ? `${monitorReport.driftScore}/100` : "—"}
+            value={monitorReport ? `${monitorReport.driftScore}/100` : "â€”"}
             note="Policy drift watch"
             icon={RefreshCcw}
             tone="bg-amber-300/10 text-amber-200"
@@ -341,7 +341,7 @@ export default function LiveSealMonitorPage() {
 
           <MetricCard
             label="Incidents"
-            value={monitorReport ? String(monitorReport.incidents.length) : "—"}
+            value={monitorReport ? String(monitorReport.incidents.length) : "â€”"}
             note="Watch and alert items"
             icon={Siren}
             tone="bg-rose-300/10 text-rose-200"
@@ -361,7 +361,7 @@ export default function LiveSealMonitorPage() {
                     {assessment.agentName}
                   </h2>
                   <p className="mt-1 text-slate-400">
-                    Status: {assessment.status} · Stage: {assessment.trustStage}
+                    Status: {assessment.status} Â· Stage: {assessment.trustStage}
                   </p>
                 </div>
               </div>
@@ -717,9 +717,7 @@ export default function LiveSealMonitorPage() {
               <div className="flex items-start gap-3">
                 <Rocket className="mt-1 h-5 w-5 shrink-0" />
                 <p>
-                  Phase 10 completed. LiveSeal Monitor now watches the released
-                  certificate, runtime health, drift signals, incidents, and
-                  scheduled re-validation readiness.
+                  LiveSeal Monitor now watches the released certificate, runtime health, drift signals, incidents, and scheduled re-validation readiness.
                 </p>
               </div>
 
@@ -739,7 +737,7 @@ export default function LiveSealMonitorPage() {
               No LiveSeal Check Yet
             </h2>
             <p className="mx-auto mt-3 max-w-2xl text-slate-400">
-              Click “Run LiveSeal Check” to simulate post-release monitoring
+              Click â€œRun LiveSeal Checkâ€ to simulate post-release monitoring
               for runtime health, policy drift, incidents, and trust signals.
             </p>
           </section>
@@ -748,6 +746,8 @@ export default function LiveSealMonitorPage() {
     </main>
   );
 }
+
+
 
 
 

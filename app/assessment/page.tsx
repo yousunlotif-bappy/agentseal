@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Link from "next/link";
 import { useState } from "react";
@@ -25,7 +25,7 @@ import { saveAssessment } from "../../lib/agentseal-storage";
 /**
  * New Agent Assessment Page
  * -------------------------
- * Phase 2 upgrade:
+ * Assessment workflow upgrade:
  * - This form now saves submitted agent data into localStorage.
  * - Dashboard can read the submitted agent.
  * - Test Forge can generate test cases from this data.
@@ -173,7 +173,7 @@ export default function AssessmentPage() {
     };
 
     /**
-     * Phase 2 connection:
+     * Assessment workflow connection:
      * This single save makes the data available to:
      * - Dashboard
      * - Test Forge
@@ -224,7 +224,7 @@ export default function AssessmentPage() {
             </div>
 
             <h2 className="mt-6 text-2xl font-black text-emerald-200">
-              Phase 2 Connected
+              Assessment Connected
             </h2>
 
             <p className="mt-3 text-sm leading-6 text-slate-300">
@@ -337,6 +337,7 @@ export default function AssessmentPage() {
     </main>
   );
 }
+
 
 
 

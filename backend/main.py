@@ -2,7 +2,7 @@
 AgentSeal FastAPI Backend MVP
 -----------------------------
 
-This is the real executable backend for AgentSeal.
+This file is the main entry point of the FastAPI backend.
 
 Run command:
     uvicorn main:app --reload --port 8000
@@ -13,7 +13,8 @@ Open API docs:
 Health check:
     http://127.0.0.1:8000/health
 
-Important note:
+Important:
+- This version includes UiPath Integration Proof routes.
 - POST /api/demo/run-full-flow is the proper API method.
 - GET  /api/demo/run-full-flow is also enabled for easy browser testing.
 """
@@ -40,6 +41,10 @@ from services.test_generator import generate_tests
 from services.test_runner import run_tests
 from storage import STORE, get, put
 
+# UiPath Integration Proof router.
+# Make sure this file exists: backend/routes_uipath.py
+from routes_uipath import router as uipath_router
+
 
 app = FastAPI(
     title="AgentSeal Backend MVP",
@@ -48,7 +53,7 @@ app = FastAPI(
         "Real executable FastAPI backend MVP for AgentSeal. "
         "Includes assessment, policy extraction, test generation, red-team "
         "generation, execution, risk scoring, human review, evidence report, "
-        "certificate, and monitoring replay."
+        "certificate, monitoring replay, and UiPath integration proof."
     ),
 )
 
@@ -66,11 +71,17 @@ app.add_middleware(
 )
 
 
+# UiPath Integration Proof routes.
+# These routes expose Test Cloud, Maestro, Human Task, Risk Case,
+# Orchestrator, and evidence mapping proof.
+app.include_router(uipath_router)
+
+
 def ensure_assessment(assessment_id: str) -> dict:
     """
     Load one assessment from memory.
 
-    If assessment does not exist, FastAPI returns 404.
+    If the assessment does not exist, FastAPI returns 404.
     """
 
     assessment = get("assessments", assessment_id)
@@ -92,6 +103,7 @@ def root():
         "service": "AgentSeal Backend MVP",
         "docs": "/docs",
         "health": "/health",
+        "uipath_proof": "/api/uipath/proof",
     }
 
 
@@ -231,7 +243,7 @@ def execute_tests(
     Execute generated test cases.
 
     mode=before:
-        Simulates unsafe agent before fixes.
+        Simulates unsafe agent before governance fixes.
 
     mode=after:
         Simulates safer agent after fixes.
@@ -271,10 +283,7 @@ def score_risk(
         execution_response = execute_tests(assessment_id, mode)
         execution = execution_response["data"].model_dump()
 
-    results = [
-        TestResult(**result)
-        for result in execution["results"]
-    ]
+    results = [TestResult(**result) for result in execution["results"]]
 
     risk = score_from_results(assessment_id, results)
 
@@ -328,10 +337,12 @@ def evidence_report(
     assessment = ensure_assessment(assessment_id)
 
     execution = get("executions", f"{assessment_id}:{mode}")
+
     if not execution:
         execution = execute_tests(assessment_id, mode)["data"].model_dump()
 
     risk = get("risk", f"{assessment_id}:{mode}")
+
     if not risk:
         risk = score_risk(assessment_id, mode)["data"].model_dump()
 
@@ -364,6 +375,7 @@ def release_certificate(
     assessment = ensure_assessment(assessment_id)
 
     risk = get("risk", f"{assessment_id}:{mode}")
+
     if not risk:
         risk = score_risk(assessment_id, mode)["data"].model_dump()
 
@@ -407,8 +419,8 @@ def run_full_demo_flow_logic():
     - POST /api/demo/run-full-flow
     - GET  /api/demo/run-full-flow
 
-    POST is the proper API method.
-    GET is added only for easy browser testing.
+    POST is the correct API method.
+    GET is enabled only for easy browser testing.
     """
 
     created = create_demo_refund_assessment()
@@ -473,7 +485,7 @@ def run_full_demo_flow_get():
     Browser-friendly demo endpoint.
 
     This allows you to paste the URL into the browser and run the full flow.
-    In real production, side-effect actions should normally use POST only.
+    In production, side-effect actions should normally use POST only.
     """
 
     return run_full_demo_flow_logic()
@@ -489,5 +501,6 @@ def debug_store():
         "ok": True,
         "data": STORE,
     }
+
 
 

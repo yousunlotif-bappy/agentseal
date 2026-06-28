@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -33,7 +33,7 @@ import {
 /**
  * Gladiator Engine Page
  * ---------------------
- * Phase 4:
+ * Gladiator Engine workflow:
  * - Reads active assessment
  * - Reads Test Forge generated test cases
  * - Generates red-team adversarial prompts
@@ -225,7 +225,7 @@ export default function GladiatorEnginePage() {
           </Link>
 
           <span className="w-fit rounded-full border border-rose-300/30 bg-rose-300/10 px-4 py-2 text-sm font-bold text-rose-200">
-            Phase 4 / Gladiator Engine
+            Gladiator Engine
           </span>
         </div>
 
@@ -278,7 +278,7 @@ export default function GladiatorEnginePage() {
                     {assessment.agentName}
                   </h2>
                   <p className="mt-1 text-slate-400">
-                    Status: {assessment.status} · Stage: {assessment.trustStage}
+                    Status: {assessment.status} Â· Stage: {assessment.trustStage}
                   </p>
                 </div>
               </div>
@@ -360,7 +360,7 @@ export default function GladiatorEnginePage() {
                 </h2>
                 <p className="mt-2 text-sm text-slate-400">
                   These prompts are saved and ready for the next Test Execution
-                  phase.
+                  workflow stage.
                 </p>
               </div>
 
@@ -384,7 +384,7 @@ export default function GladiatorEnginePage() {
 
                       <div>
                         <p className="font-mono text-sm text-cyan-300">
-                          {prompt.id} · Source {prompt.testCaseId}
+                          {prompt.id} Â· Source {prompt.testCaseId}
                         </p>
                         <h3 className="mt-1 text-xl font-black">
                           {prompt.attackType}
@@ -432,8 +432,7 @@ export default function GladiatorEnginePage() {
 
             <div className="mt-6 flex flex-col gap-3 rounded-2xl border border-amber-300/20 bg-amber-300/[0.06] p-5 text-sm leading-6 text-amber-100 md:flex-row md:items-center md:justify-between">
               <p>
-                Phase 4 completed. Next phase will use these prompts to simulate
-                execution results, pass/fail status, and evidence logs.
+                Red-team prompt library is ready. Continue to Test Execution to simulate validation results, pass/fail status, and evidence logs.
               </p>
 
               <Link
@@ -451,7 +450,7 @@ export default function GladiatorEnginePage() {
               No Red-Team Prompts Yet
             </h2>
             <p className="mx-auto mt-3 max-w-2xl text-slate-400">
-              Click “Generate Red-Team Prompts” to convert Test Forge cases into
+              Click â€œGenerate Red-Team Promptsâ€ to convert Test Forge cases into
               adversarial testing prompts.
             </p>
           </section>
@@ -460,6 +459,9 @@ export default function GladiatorEnginePage() {
     </main>
   );
 }
+
+
+
 
 
 
