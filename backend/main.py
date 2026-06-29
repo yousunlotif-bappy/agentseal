@@ -2,23 +2,23 @@
 AgentSeal FastAPI Backend MVP
 -----------------------------
 
-This file is the main entry point of the FastAPI backend.
+Main entry point for the AgentSeal backend.
 
-Run command:
+Run locally:
     uvicorn main:app --reload --port 8000
 
-Open API docs:
+Docs:
     http://127.0.0.1:8000/docs
 
-Health check:
-    http://127.0.0.1:8000/health
-
-Important:
-- This version includes UiPath Integration Proof routes.
-- POST /api/demo/run-full-flow is the proper API method.
-- GET  /api/demo/run-full-flow is also enabled for easy browser testing.
+This backend includes:
+    - Core AgentSeal MVP workflow
+    - UiPath proof/mapping routes
+    - UiPath live integration routes
 """
 
+from __future__ import annotations
+
+import os
 from uuid import uuid4
 
 from fastapi import FastAPI, HTTPException, Query
@@ -32,6 +32,8 @@ from models import (
     RunMode,
     TestResult,
 )
+from routes_uipath import router as uipath_router
+from routes_uipath_live import router as uipath_live_router
 from services.monitoring import replay_logs
 from services.policy_extractor import extract_policy
 from services.red_team import generate_red_team_prompts
@@ -41,10 +43,6 @@ from services.test_generator import generate_tests
 from services.test_runner import run_tests
 from storage import STORE, get, put
 
-# UiPath Integration Proof router.
-# Make sure this file exists: backend/routes_uipath.py
-from routes_uipath import router as uipath_router
-
 
 app = FastAPI(
     title="AgentSeal Backend MVP",
@@ -53,34 +51,50 @@ app = FastAPI(
         "Real executable FastAPI backend MVP for AgentSeal. "
         "Includes assessment, policy extraction, test generation, red-team "
         "generation, execution, risk scoring, human review, evidence report, "
-        "certificate, monitoring replay, and UiPath integration proof."
+        "certificate, monitoring replay, UiPath integration proof, and "
+        "live UiPath Orchestrator API integration."
     ),
 )
 
 
-# CORS allows your Next.js frontend to call this FastAPI backend.
+# CORS:
+# - localhost is for local frontend development.
+# - Vercel is for your deployed frontend.
+# - FRONTEND_URL lets Render/Vercel override without code changes.
+frontend_url = os.getenv("FRONTEND_URL", "https://agentseal.vercel.app").strip()
+
+allowed_origins = [
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+    "https://agentseal.vercel.app",
+]
+
+if frontend_url and frontend_url not in allowed_origins:
+    allowed_origins.append(frontend_url)
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:3000",
-        "http://127.0.0.1:3000",
-    ],
+    allow_origins=allowed_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
 
-# UiPath Integration Proof routes.
-# These routes expose Test Cloud, Maestro, Human Task, Risk Case,
+# UiPath proof routes:
+# These show Test Cloud, Maestro, Human Task, Risk Case,
 # Orchestrator, and evidence mapping proof.
 app.include_router(uipath_router)
+
+
+# UiPath live routes:
+# These call real UiPath OAuth + Orchestrator APIs.
+app.include_router(uipath_live_router)
 
 
 def ensure_assessment(assessment_id: str) -> dict:
     """
     Load one assessment from memory.
-
     If the assessment does not exist, FastAPI returns 404.
     """
 
@@ -104,6 +118,7 @@ def root():
         "docs": "/docs",
         "health": "/health",
         "uipath_proof": "/api/uipath/proof",
+        "uipath_live": "/api/uipath/live/config-check",
     }
 
 
@@ -125,7 +140,6 @@ def health():
 def create_assessment(payload: AssessmentCreate):
     """
     Create a new agent assessment.
-
     This is the starting point of the backend workflow.
     """
 
@@ -284,7 +298,6 @@ def score_risk(
         execution = execution_response["data"].model_dump()
 
     results = [TestResult(**result) for result in execution["results"]]
-
     risk = score_from_results(assessment_id, results)
 
     put(
@@ -415,9 +428,9 @@ def run_full_demo_flow_logic():
     """
     Shared full-flow logic.
 
-    This helper is used by both:
-    - POST /api/demo/run-full-flow
-    - GET  /api/demo/run-full-flow
+    Used by:
+        - POST /api/demo/run-full-flow
+        - GET /api/demo/run-full-flow
 
     POST is the correct API method.
     GET is enabled only for easy browser testing.
@@ -473,7 +486,6 @@ def run_full_demo_flow_logic():
 def run_full_demo_flow_post():
     """
     Proper API endpoint for running the complete backend flow.
-    Use this from Swagger, frontend, Postman, or scripts.
     """
 
     return run_full_demo_flow_logic()
@@ -484,7 +496,6 @@ def run_full_demo_flow_get():
     """
     Browser-friendly demo endpoint.
 
-    This allows you to paste the URL into the browser and run the full flow.
     In production, side-effect actions should normally use POST only.
     """
 
