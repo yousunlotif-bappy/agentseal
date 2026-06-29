@@ -24,7 +24,7 @@ AgentSeal is the trust layer that decides whether enterprise AI agents are safe 
 | Live UiPath Config Check      | https://agentseal.onrender.com/api/uipath/live/config-check |
 | GitHub Repository             | https://github.com/yousunlotif-bappy/agentseal              |
 | Primary Track                 | UiPath Test Cloud                                           |
-| Demo Video                    | Add your YouTube / Loom / Devpost video link here           |
+| Demo Video                    | https://youtu.be/dv5vqkZK85g                                |
 
 ---
 
